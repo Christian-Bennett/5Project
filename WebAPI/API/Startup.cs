@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -32,10 +33,8 @@ namespace API
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
             });
 
-            services.AddHttpClient();
-
-            services.AddTransient<MongoDb>();
-
+            services.AddTransient<HttpClient>();
+            services.AddScoped<MongoDb>();
             services.AddControllers();
         }
 

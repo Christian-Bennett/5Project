@@ -8,22 +8,21 @@ using System.Net.Http;
 using System.Text;
 using Domain.Models;
 using Storage.Database;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace API.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
-    public class APIController : ControllerBase
+    [Route("[controller]/[action]")]
+    public class UserController : ControllerBase
     {
       //private readonly string URL = "http://swapi.dev/api/";
       private readonly HttpClient _http;
-      private readonly ILogger<APIController> _logger;
+      private readonly ILogger<UserController> _logger;
       private readonly MongoDb _mongoDb;
 
       public string result = "";
 
-      public APIController(ILogger<APIController> logger, HttpClient http, MongoDb mongoDb)
+      public UserController(ILogger<UserController> logger, HttpClient http, MongoDb mongoDb)
       {
           _logger = logger;
           _http = http;
@@ -38,10 +37,34 @@ namespace API.Controllers
       }
 
       [HttpPost]
-      public ActionResult GetPost([FromBody] UserModel pm)
+      public IActionResult GetOne(UserModel userModel)
       {
-        _mongoDb.Post(pm); //await _http.GetAsync(sb.ToString());
+        var result = _mongoDb.Get<UserModel>(userModel);
+        return Ok(result);
+      }
+
+
+      [HttpPost]
+      public IActionResult Post(UserModel userModel)
+      {
+        _mongoDb.Post(userModel); //await _http.GetAsync(sb.ToString());
         return Ok();
       }
+
+      [HttpPut]
+      public IActionResult Put(UserModel userModel)
+      {
+        _mongoDb.Put(userModel); //await _http.GetAsync(sb.ToString());
+        return Ok();
+      }
+
+      [HttpDelete]
+      public IActionResult Delete(UserModel userModel)
+      {
+        _mongoDb.Delete<UserModel>(userModel);
+        return Ok();
+      }
+
+
     }
 }

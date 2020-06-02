@@ -9,37 +9,49 @@ namespace Storage.Database
 {
   public class MongoDb
   {
+    private MongoClient client { get; set; }
+    private IMongoDatabase db { get; set; }
     public List<T> Get<T>()
     {
-      var client = new MongoClient("mongodb://127.0.0.1:27017");
-      var db = client.GetDatabase("People");
-      
-      var collection = db.GetCollection<T>("Person");
-      
+      string collName = typeof(T).ToString();
+      var collection = db.GetCollection<T>(collName);
       return collection.Find(new BsonDocument()).ToList();
-
     }
 
-    public void Post<T>(T pm)
+    public List<T> Get<T>(T model)
     {
-      var client = new MongoClient("mongodb://127.0.0.1:27017");
-      var db = client.GetDatabase("People");
-
-      IMongoCollection<T> collection = db.GetCollection<T>("Person");
-      collection.InsertOne(pm);
-
+      string collName = typeof(T).ToString();
+      var uId = model.GetType().GetProperty("id").GetValue(model);
+      var collection = db.GetCollection<T>(collName);
+      return collection.Find(Builders<T>.Filter.Eq("id", uId)).ToList();
     }
 
-    
+    public void Post<T>(T model) 
+    {
+      string collName = typeof(T).ToString();
+      IMongoCollection<T> collection = db.GetCollection<T>(collName);
+      collection.InsertOne(model);
+    }
+
+    public void Put<T>(T model)
+    {
+      string collName = typeof(T).ToString();
+      var uId = model.GetType().GetProperty("id").GetValue(model);
+      var dbFilter = Builders<T>.Filter.Eq("id", uId);
+      db.GetCollection<T>(collName).ReplaceOne(dbFilter, model);
+    }
+
+    public void Delete<T>(T model)
+    {
+      string collName = typeof(T).ToString();
+      var uId = model.GetType().GetProperty("id").GetValue(model);
+      db.GetCollection<T>(collName).DeleteOne(Builders<T>.Filter.Eq("id", uId));
+    }
 
     public MongoDb()
     {
-
-      // var client = new MongoClient();
-      // db = client.GetDatabase(database);
-      // var client = new MongoClient("mongodb://127.0.0.1:27017");
-      // var db = client.GetDatabase("foo");
-
+      client = new MongoClient("mongodb://127.0.0.1:27017");
+      db = client.GetDatabase("5Project");
     }
   }
 }
