@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { MessageService } from './message.service';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { catchError, map, tap } from 'rxjs/operators';
 
 import { User } from './user';
@@ -13,7 +13,7 @@ import { Observable, of } from 'rxjs';
 })
 export class UserService {
 
-  private UsersUrl2 = `https://localhost:5001/Users/`;
+  private UsersUrl = `https://localhost:5001/Users/`;
 
   constructor(private messageService: MessageService, private http: HttpClient) { }
 
@@ -24,20 +24,23 @@ export class UserService {
 
   getUsers(): Observable<User[]>
   {
-    this.messageService.add("UserService: Fetched Users");
-    
-
-    return this.http.get<User[]>(this.UsersUrl2.concat("Get")).pipe(
-      tap(_ => this.log('fetched heroes')),
+    return this.http.get<User[]>(`${this.UsersUrl}Get`).pipe(
+      tap(_ => this.log('Fetched Users')),
       
       catchError(this.handleError<User[]>('getUsers', []))
     )
   }
 
-  getUser(id: string): Observable<User>
+  getUser(uId: string): Observable<User>
   {
-    this.messageService.add(`UserService: Fetched User id=${id}`)
-    return of(USERS.find(user => user.id === id))
+    let u2: User;
+    this.messageService.add(`UserService: Fetching User id=${uId}`)
+    const options = uId ?
+    { params: new HttpParams().set('id', uId) } : {};
+    return this.http.get<User>(`${this.UsersUrl}GetOne`, options).pipe(
+      tap(_ => this.log(`Fetched User id=${uId}`)),
+      catchError(this.handleError<User>(`getUser id=${uId}`))
+    )
   }
 
   private handleError<T>(operation = 'operation', result?: T) 

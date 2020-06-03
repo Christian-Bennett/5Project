@@ -38,10 +38,10 @@ namespace API.Controllers
         return Ok(result);
       }
 
-      [HttpPost]
-      public IActionResult GetOne([FromBody] UserModel UserModel)
+      [HttpGet]
+      public IActionResult GetOne()
       {
-        var result = _mongoDb.Get<UserModel>(UserModel);
+        var result = _mongoDb.Get<UserModel>(Request.QueryString.ToString().Substring(4));
         return Ok(result);
       }
 

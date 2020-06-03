@@ -5,6 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 
 import { UserService } from '../user.service';
+import { MessageService } from '../message.service';
 
 @Component({
   selector: 'app-user-detail',
@@ -17,7 +18,8 @@ export class UserDetailComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private userService: UserService,
-    private location: Location    
+    private location: Location,    
+    private messageService: MessageService
     ) { }
 
   ngOnInit(): void 
@@ -28,7 +30,7 @@ export class UserDetailComponent implements OnInit {
   getHero(): void 
   {
     var id = this.route.snapshot.paramMap.get('id').toString();
-    this.userService.getUser(id).subscribe(user => this.user = user)
+    this.userService.getUser(id).subscribe(user => this.user = user);
   }
 
   goBack(): void

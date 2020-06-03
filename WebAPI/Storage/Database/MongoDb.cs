@@ -18,12 +18,12 @@ namespace Storage.Database
       return collection.Find(new BsonDocument()).ToList();
     }
 
-    public List<T> Get<T>(T model)
+    public T Get<T>(string uId)
     {
       string collName = typeof(T).ToString();
-      var uId = model.GetType().GetProperty("id").GetValue(model);
       var collection = db.GetCollection<T>(collName);
-      return collection.Find(Builders<T>.Filter.Eq("id", uId)).ToList();
+      var users = collection.Find(Builders<T>.Filter.Eq("id", uId)).ToList();
+      return users[0];
     }
 
     public void Post<T>(T model) 
