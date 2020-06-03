@@ -1,19 +1,7 @@
 <h2>User Information</h2>
+
 <ul class="users">
-  <li *ngFor="let user of users" (click)="onSelect(user)">
+  <li *ngFor="let user of users" routerLink="/detail/{{user.id}}">
     <span class="badge">{{user.id}}: </span> {{user.firstName}} {{user.lastName}}
   </li>
 </ul>
-<div *ngIf="SelectedUser">
-  <div><span>id: </span>{{SelectedUser.id}}</div>
-  <div><span>First Name: </span>{{SelectedUser.firstName}}</div>
-  <div><span>Last Name: </span>{{SelectedUser.lastName}}</div>
-  <div>
-    <label>First Name:
-      <input [(ngModel)]="SelectedUser.firstName" placeholder="First Name"/>
-    </label>
-    <label>Last Name:
-      <input [(ngModel)]="SelectedUser.lastName" placeholder="Last Name"/>
-    </label>
-  </div>
-</div>
