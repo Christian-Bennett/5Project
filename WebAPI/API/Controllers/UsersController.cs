@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Cors;
 using System.Net.Http;
 using System.Text;
 using Domain.Models;
@@ -11,18 +12,19 @@ using Storage.Database;
 
 namespace API.Controllers
 {
+    [EnableCors]
     [ApiController]
     [Route("[controller]/[action]")]
-    public class UserController : ControllerBase
+    public class UsersController : ControllerBase
     {
       //private readonly string URL = "http://swapi.dev/api/";
       private readonly HttpClient _http;
-      private readonly ILogger<UserController> _logger;
+      private readonly ILogger<UsersController> _logger;
       private readonly MongoDb _mongoDb;
 
       public string result = "";
 
-      public UserController(ILogger<UserController> logger, HttpClient http, MongoDb mongoDb)
+      public UsersController(ILogger<UsersController> logger, HttpClient http, MongoDb mongoDb)
       {
           _logger = logger;
           _http = http;
@@ -37,31 +39,31 @@ namespace API.Controllers
       }
 
       [HttpPost]
-      public IActionResult GetOne(UserModel userModel)
+      public IActionResult GetOne([FromBody] UserModel UserModel)
       {
-        var result = _mongoDb.Get<UserModel>(userModel);
+        var result = _mongoDb.Get<UserModel>(UserModel);
         return Ok(result);
       }
 
 
       [HttpPost]
-      public IActionResult Post(UserModel userModel)
+      public IActionResult Post(UserModel UserModel)
       {
-        _mongoDb.Post(userModel); //await _http.GetAsync(sb.ToString());
+        _mongoDb.Post(UserModel); //await _http.GetAsync(sb.ToString());
         return Ok();
       }
 
       [HttpPut]
-      public IActionResult Put(UserModel userModel)
+      public IActionResult Put(UserModel UserModel)
       {
-        _mongoDb.Put(userModel); //await _http.GetAsync(sb.ToString());
+        _mongoDb.Put(UserModel); //await _http.GetAsync(sb.ToString());
         return Ok();
       }
 
       [HttpDelete]
-      public IActionResult Delete(UserModel userModel)
+      public IActionResult Delete(UserModel UserModel)
       {
-        _mongoDb.Delete<UserModel>(userModel);
+        _mongoDb.Delete<UserModel>(UserModel);
         return Ok();
       }
 

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { MessageService } from './message.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { catchError, map, tap } from 'rxjs/operators';
 
 import { User } from './user';
 import { USERS } from './mock-users';
@@ -12,6 +13,8 @@ import { Observable, of } from 'rxjs';
 })
 export class UserService {
 
+  private UsersUrl2 = `https://localhost:5001/Users/`;
+
   constructor(private messageService: MessageService, private http: HttpClient) { }
 
   private log(message: string)
@@ -21,14 +24,31 @@ export class UserService {
 
   getUsers(): Observable<User[]>
   {
-    this.messageService.add("UserService: Fetched Users")
-    return of(USERS);
+    this.messageService.add("UserService: Fetched Users");
+    
+
+    return this.http.get<User[]>(this.UsersUrl2.concat("Get")).pipe(
+      tap(_ => this.log('fetched heroes')),
+      
+      catchError(this.handleError<User[]>('getUsers', []))
+    )
   }
 
-  getUser(id: number): Observable<User>
+  getUser(id: string): Observable<User>
   {
     this.messageService.add(`UserService: Fetched User id=${id}`)
     return of(USERS.find(user => user.id === id))
+  }
+
+  private handleError<T>(operation = 'operation', result?: T) 
+  {
+    return (error: any): Observable<T> => {
+      console.error(error);
+
+      this.log(`${operation} failed: ${error.message}`);
+
+      return of(result as T);
+    }
   }
 
   
