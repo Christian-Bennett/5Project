@@ -14,6 +14,12 @@ import { Observable, of } from 'rxjs';
 export class UserService {
 
   private UsersUrl = `https://localhost:5001/Users/`;
+  user: User;
+
+  httpOptions = 
+  {
+    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+  };
 
   constructor(private messageService: MessageService, private http: HttpClient) { }
 
@@ -33,7 +39,6 @@ export class UserService {
 
   getUser(uId: string): Observable<User>
   {
-    let u2: User;
     this.messageService.add(`UserService: Fetching User id=${uId}`)
     const options = uId ?
     { params: new HttpParams().set('id', uId) } : {};
@@ -41,6 +46,33 @@ export class UserService {
       tap(_ => this.log(`Fetched User id=${uId}`)),
       catchError(this.handleError<User>(`getUser id=${uId}`))
     )
+  }
+
+  updateUser(user: User): Observable<any>
+  {
+    return this.http.put(`${this.UsersUrl}Put`, user, this.httpOptions).pipe(
+      tap(_ => this.log(`updated hero id=${user.id}`)),
+      catchError(this.handleError<any>('updateUser'))
+    );
+  }
+
+  addUser(user: User): Observable<User> {
+    return this.http.post<User>(`${this.UsersUrl}Post`, user, this.httpOptions).pipe(
+      tap((newHero: User) => this.log(`added hero w/ id=${newHero.id}`)),
+      catchError(this.handleError<User>('addHero'))
+    );
+  }
+
+  deleteUser(user: User | string): Observable<User> 
+  {
+    const uId = typeof user === 'string' ? user : user.id;
+    const options = uId ?
+    { params: new HttpParams().set('id', uId) } : {};
+
+    return this.http.delete<User>(`${this.UsersUrl}Delete`, options).pipe(
+      tap(_ => this.log(`deleted user id=${uId}`)),
+      catchError(this.handleError<User>('deleteUser'))
+    );
   }
 
   private handleError<T>(operation = 'operation', result?: T) 
@@ -56,3 +88,5 @@ export class UserService {
 
   
 }
+
+

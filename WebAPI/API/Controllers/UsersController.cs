@@ -47,23 +47,26 @@ namespace API.Controllers
 
 
       [HttpPost]
-      public IActionResult Post(UserModel UserModel)
+      public IActionResult Post([FromBody] UserModel userModel)
       {
-        _mongoDb.Post(UserModel); //await _http.GetAsync(sb.ToString());
+        System.Console.WriteLine("Called");
+        _mongoDb.Post(userModel); //await _http.GetAsync(sb.ToString());
         return Ok();
       }
 
       [HttpPut]
-      public IActionResult Put(UserModel UserModel)
+      public IActionResult Put([FromBody] UserModel userModel)
       {
-        _mongoDb.Put(UserModel); //await _http.GetAsync(sb.ToString());
+        System.Console.WriteLine(userModel.FirstName);
+        _mongoDb.Put(userModel); //await _http.GetAsync(sb.ToString());
         return Ok();
       }
 
       [HttpDelete]
-      public IActionResult Delete(UserModel UserModel)
+      public IActionResult Delete()
       {
-        _mongoDb.Delete<UserModel>(UserModel);
+        System.Console.WriteLine("Called");
+        _mongoDb.Delete<UserModel>(Request.QueryString.ToString().Substring(4));
         return Ok();
       }
 

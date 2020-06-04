@@ -13,15 +13,39 @@ export class UsersComponent implements OnInit {
 
   users: User[];
 
-  constructor(private userService: UserService) { }
+  user: User = {
+    id: "9b8977da-8fd0-4b91-a069-894572cf6150",
+    username: "username",
+    password: "pass",
+    firstName: "name",
+    lastName: "name",
+    emailAddress: "email",
+  };
 
-  ngOnInit(): void {
+  constructor(private userService: UserService, private messageService:MessageService) { }
+
+  ngOnInit(): void 
+  {
     this.getUsers();
   }
 
   getUsers(): void
   {
     this.userService.getUsers().subscribe(users => this.users = users);
+  }
+
+  add(name: string): void 
+  {
+    this.messageService.add(name);
+    name = name.trim();
+    if(!name) {return;}
+    this.userService.addUser(this.user).subscribe(user => {this.users.push(user)});
+  }
+
+  delete(user: User): void 
+  {
+    this.users = this.users.filter(u => u !== user);
+    this.userService.deleteUser(user).subscribe();
   }
 
 }

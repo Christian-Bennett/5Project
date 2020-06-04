@@ -28,6 +28,7 @@ namespace Storage.Database
 
     public void Post<T>(T model) 
     {
+      model.GetType().GetProperty("id").SetValue(model, Guid.NewGuid());
       string collName = typeof(T).ToString();
       IMongoCollection<T> collection = db.GetCollection<T>(collName);
       collection.InsertOne(model);
@@ -37,14 +38,12 @@ namespace Storage.Database
     {
       string collName = typeof(T).ToString();
       var uId = model.GetType().GetProperty("id").GetValue(model);
-      var dbFilter = Builders<T>.Filter.Eq("id", uId);
-      db.GetCollection<T>(collName).ReplaceOne(dbFilter, model);
+      db.GetCollection<T>(collName).ReplaceOne(Builders<T>.Filter.Eq("id", uId), model);
     }
 
-    public void Delete<T>(T model)
+    public void Delete<T>(string uId)
     {
       string collName = typeof(T).ToString();
-      var uId = model.GetType().GetProperty("id").GetValue(model);
       db.GetCollection<T>(collName).DeleteOne(Builders<T>.Filter.Eq("id", uId));
     }
 
