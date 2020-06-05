@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { User } from '../user';
 import { UserService } from '../user.service';
+import * as $ from 'jquery';
 
 
 @Component({
@@ -16,6 +17,9 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.getUsers();
+    $(document).ready(function(){
+      $("")
+    });
   }
 
   getUsers(): void

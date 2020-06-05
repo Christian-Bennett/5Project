@@ -65,7 +65,6 @@ namespace API.Controllers
       [HttpDelete]
       public IActionResult Delete()
       {
-        System.Console.WriteLine("Called");
         _mongoDb.Delete<UserModel>(Request.QueryString.ToString().Substring(4));
         return Ok();
       }
