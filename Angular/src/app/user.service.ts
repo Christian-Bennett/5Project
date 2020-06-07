@@ -50,15 +50,15 @@ export class UserService {
   updateUser(user: User): Observable<any>
   {
     return this.http.put(`${this.UsersUrl}Put`, user, this.httpOptions).pipe(
-      tap(_ => this.log(`updated hero id=${user.id}`)),
+      tap(_ => this.log(`updated User id=${user.id}`)),
       catchError(this.handleError<any>('updateUser'))
     );
   }
 
   addUser(user: User): Observable<User> {
     return this.http.post<User>(`${this.UsersUrl}Post`, user, this.httpOptions).pipe(
-      tap((newHero: User) => this.log(`added hero w/ id=${newHero.id}`)),
-      catchError(this.handleError<User>('addHero'))
+      tap((newUser: User) => this.log(`added User w/ id=${newUser.id}`)),
+      catchError(this.handleError<User>('addUser'))
     );
   }
 
