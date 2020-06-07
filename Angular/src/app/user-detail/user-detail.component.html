@@ -1,7 +1,7 @@
 <div *ngIf="user">
   <div class="user-details">
-    <div><span>id: </span>{{user.id}}</div>
-    <div><span>Username: </span>{{user.username}}</div>
+    <div *ngIf="user.id != ''"><span>id: </span>{{user.id}}</div>
+    <div *ngIf="user.username != ''"><span>Username: </span>{{user.username}}</div>
   </div>
   <form [formGroup]="form" (ngSubmit)="onSubmit()">
     <label>
@@ -28,7 +28,7 @@
       Email:
       <input type="text" formControlName="emailAddress"/>
     </label>
-    <div formGroupName="address">
+    <div formGroupName="address" class="address">
       <h3>Address</h3>
       <label>
         Street:
@@ -49,6 +49,11 @@
     </div>
   </form>
 </div>
+<div *ngIf="flag; else elseBlock">
+  <button (click)="onUpdate()" type="submit">Update</button>
+</div>
+<ng-template #elseBlock>
+  <button (click)="onSubmit()" type="submit">Submit</button>
+</ng-template>
 
-<button (click)="onSubmit()" type="submit">Submit</button>
 <button (click)="goBack()">Return to dashboard</button>

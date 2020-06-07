@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { User } from '../user';
+import { v4 as uuid } from 'uuid';
 
 import { FormsModule, ReactiveFormsModule, FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
 
@@ -9,6 +10,7 @@ import { Location, JsonPipe } from '@angular/common';
 import { UserService } from '../user.service';
 import { MessageService } from '../message.service';
 import { tap, subscribeOn } from 'rxjs/operators';
+import { async } from 'rxjs/internal/scheduler/async';
 
 @Component({
   selector: 'app-user-detail',
@@ -19,7 +21,7 @@ export class UserDetailComponent implements OnInit {
 
   @Input() user: User;
   form: FormGroup;
-
+  flag: boolean;
   
   constructor(
     private route: ActivatedRoute,
@@ -29,9 +31,9 @@ export class UserDetailComponent implements OnInit {
     private messageService: MessageService
     ) { }
 
-  ngOnInit(): void 
+  async ngOnInit()
   {
-    this.getUser();
+    let id = this.route.snapshot.paramMap.get('id').toString();
     this.form = this.formBuilder.group({
       id:  [''],
       username:  ['', Validators.required],
@@ -47,16 +49,38 @@ export class UserDetailComponent implements OnInit {
       })
     });
 
+    if(id.length == 36){
+      this.getUser(id);
+    }
+    else{
+      await this.createUser().then(user => this.user = user).then(
+        user => this.form.patchValue({
+          id: uuid(),
+          username: '',
+          password: '',
+          firstName: '',
+          lastName: '',
+          emailAddress: '',
+          address: {
+            street: '',
+            city: '',
+            state: '',
+            zip: 0
+          }})
+      )
+    }
+    
+
 
   }
-  getUser(): void 
+  getUser(id: string): void 
   {
-    var id = this.route.snapshot.paramMap.get('id').toString();
+    this.flag = true;
     this.userService.getUser(id).pipe(tap(
       user => this.form.patchValue({
         id: user.id,
         username: user.username,
-        password: user.password,
+        password: '**********',
         firstName: user.firstName,
         lastName: user.lastName,
         emailAddress: user.emailAddress,
@@ -68,12 +92,21 @@ export class UserDetailComponent implements OnInit {
         }
       })))
       .subscribe(user => this.user = user);
+      // this.form.controls['username'].disable();
+      // this.form.controls['password'].disable();
+      // this.form.controls['id'].disable();
+  }
+
+  onUpdate(): void {
+    //console.warn(this.form.value);
+    this.user = this.form.value;
+    this.userService.updateUser(this.user).subscribe(() => this.goBack());
   }
 
   onSubmit(): void {
     //console.warn(this.form.value);
     this.user = this.form.value;
-    this.userService.updateUser(this.user).subscribe(() => this.goBack());
+    this.userService.addUser(this.user).subscribe(() => this.goBack());
   }
 
   goBack(): void
@@ -81,4 +114,21 @@ export class UserDetailComponent implements OnInit {
     this.location.back();
   }
 
+  async createUser()
+  {
+    return {
+      id: '',
+      username: '',
+      password: '',
+      firstName: '',
+      lastName: '',
+      emailAddress: '',
+      address: {
+        street: '',
+        city: '',
+        state: '',
+        zip: 0
+      }
+    }
+  }
 }
