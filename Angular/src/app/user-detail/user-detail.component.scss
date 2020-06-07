@@ -1,27 +1,32 @@
 @import "../../assets/variables";
 /* UserDetailComponent's private CSS styles */
 label {
-  display: inline-block;
+  display: block;
   width: 10em;
   margin: .5em .5em;
   color: #607D8B;
   font-weight: bold;
 }
-div > span {
-  display: inline-block;
-  margin-left: .5em;
-  margin-bottom: .3em;
-  font-family: Georgia, 'Times New Roman', Times, serif;
-  font-size: inherit;
-  padding-right: 4px;
-}
 .user-details {
   font-size: 1.2em;
+  margin-left: 1em;
 }
-h5 {
-  margin: -1.3em 0em .3em;
-  width: 72%;
-  background-color: $bg-color;
+form {
+  padding-left: 1em;
+  width: fit-content;
+}
+h3 {
+  margin: -19px 3px 2px;
+  padding-left: -1em;
+  font-size: 1.75em;
+  color: #607D8B;
+  width: fit-content;
+  background-color: transparentize($color: #ffffff, $amount: .1);
+}
+form > div {
+  border-style: groove;
+  width: 15em;
+  margin-top: 2em;
 }
 .current {
   margin: .5em .5em 1em;
@@ -37,9 +42,11 @@ input {
   padding-left: .4em;
 }
 button {
+  display: block;
   margin-top: 20px;
+  margin-left: 1em;
   font-family: Arial;
-  background-color: #eee;
+  background-color: rgb(190, 189, 189);
   border: none;
   padding: 5px 10px;
   border-radius: 4px;

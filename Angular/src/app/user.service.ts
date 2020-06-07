@@ -4,7 +4,6 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { catchError, map, tap } from 'rxjs/operators';
 
 import { User } from './user';
-import { USERS } from './mock-users';
 import { Observable, of } from 'rxjs';
 
 

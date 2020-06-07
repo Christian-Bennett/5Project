@@ -20,6 +20,12 @@ export class UsersComponent implements OnInit {
     firstName: "name",
     lastName: "name",
     emailAddress: "email",
+    address: {
+      street: "street",
+      city: "city",
+      state: "state",
+      zip: 12010
+    }
   };
 
   constructor(private userService: UserService, private messageService:MessageService) { }

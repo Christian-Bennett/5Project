@@ -6,4 +6,10 @@ export interface User
   firstName: string;
   lastName: string;
   emailAddress: string;
+  address: {
+    street: string,
+    city: string,
+    state: string,
+    zip: number
+  }
 }
