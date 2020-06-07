@@ -28,7 +28,7 @@ namespace Storage.Database
 
     public void Post<T>(T model) 
     {
-      //model.GetType().GetProperty("id").SetValue(model, Guid.NewGuid());
+      model.GetType().GetProperty("id").SetValue(model, Guid.NewGuid());
       string collName = typeof(T).ToString();
       IMongoCollection<T> collection = db.GetCollection<T>(collName);
       collection.InsertOne(model);

@@ -11,6 +11,9 @@ import { UserService } from '../user.service';
 import { MessageService } from '../message.service';
 import { tap, subscribeOn } from 'rxjs/operators';
 import { async } from 'rxjs/internal/scheduler/async';
+//import { bcrypt } from 'bcrypt';
+
+declare var require: any;
 
 @Component({
   selector: 'app-user-detail',
@@ -34,63 +37,21 @@ export class UserDetailComponent implements OnInit {
   async ngOnInit()
   {
     let id = this.route.snapshot.paramMap.get('id').toString();
-    this.form = this.formBuilder.group({
-      id:  [''],
-      username:  ['', Validators.required],
-      password: [''],
-      firstName:  ['', Validators.required],
-      lastName:  ['', Validators.required],
-      emailAddress:  ['', Validators.required],
-      address: this.formBuilder.group({
-        street:  ['', Validators.required],
-        city:  ['', Validators.required],
-        state:  ['', Validators.required],
-        zip:  ['', Validators.required]
-      })
-    });
+    
 
     if(id.length == 36){
       this.getUser(id);
     }
     else{
       await this.createUser().then(user => this.user = user).then(
-        user => this.form.patchValue({
-          id: uuid(),
-          username: '',
-          password: '',
-          firstName: '',
-          lastName: '',
-          emailAddress: '',
-          address: {
-            street: '',
-            city: '',
-            state: '',
-            zip: 0
-          }})
-      )
+        user => this.buildForm(user))
     }
-    
-
-
   }
   getUser(id: string): void 
   {
     this.flag = true;
     this.userService.getUser(id).pipe(tap(
-      user => this.form.patchValue({
-        id: user.id,
-        username: user.username,
-        password: '**********',
-        firstName: user.firstName,
-        lastName: user.lastName,
-        emailAddress: user.emailAddress,
-        address: {
-          street: user.address.street,
-          city: user.address.city,
-          state: user.address.state,
-          zip: user.address.zip
-        }
-      })))
+      user => this.buildForm(user)))
       .subscribe(user => this.user = user);
       // this.form.controls['username'].disable();
       // this.form.controls['password'].disable();
@@ -114,10 +75,28 @@ export class UserDetailComponent implements OnInit {
     this.location.back();
   }
 
+  buildForm(user: User): void
+  {
+    this.form = this.formBuilder.group({
+      id:  [user.id],
+      username:  [user.username, Validators.required],
+      password: [user.password],
+      firstName:  [user.firstName, Validators.required],
+      lastName:  [user.lastName, Validators.required],
+      emailAddress:  [user.emailAddress, Validators.required],
+      address: this.formBuilder.group({
+        street:  [user.address.street, Validators.required],
+        city:  [user.address.city, Validators.required],
+        state:  [user.address.state, Validators.required],
+        zip:  [user.address.zip, Validators.required]
+      })
+    })
+  }
+
   async createUser()
   {
     return {
-      id: '',
+      id: uuid(),
       username: '',
       password: '',
       firstName: '',
@@ -131,4 +110,13 @@ export class UserDetailComponent implements OnInit {
       }
     }
   }
+  // Funct(): void 
+  // {
+  //   const bcrypt = require('../../../node_modules/bcrypt');
+  //   const saltRounds = 10;
+  //   const myPlaintextPassword = 's0/\/\P4$$w0rD';
+  //   const someOtherPlaintextPassword = 'not_bacon';
+  // }
 }
+
+
