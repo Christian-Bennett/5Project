@@ -1,8 +1,15 @@
 <div *ngIf="user">
-  <div><span>id: </span>{{user.id}}</div>
-  <div><span>First Name: </span>{{user.firstName}}</div>
-  <div><span>Last Name: </span>{{user.lastName}}</div>
-  <div>
+  <div class="user-details">
+    <div><span>id: </span>{{user.id}}</div>
+    <div><span>Username: </span>{{user.username}}</div>
+    <div class="current">
+      <h5>Current details:</h5>
+      <div><span>First Name: </span>{{user.firstName}}</div>
+      <div><span>Last Name: </span>{{user.lastName}}</div>
+      <div><span>Email: </span>{{user.emailAddress}}</div>
+    </div>
+  </div>
+  <!-- <div>
     <label>First Name:
       <input [(ngModel)]="user.firstName" placeholder="First Name"/>
     </label>
@@ -10,7 +17,12 @@
     <label>Last Name:
       <input [(ngModel)]="user.lastName" placeholder="Last Name"/>
     </label>
-  </div>
+    <br>
+    <label>Email:
+      <input [(ngModel)]="user.emailAddress" placeholder="Email"/>
+    </label>
+
+  </div> -->
 </div>
 
 <button (click)="save()">save</button>

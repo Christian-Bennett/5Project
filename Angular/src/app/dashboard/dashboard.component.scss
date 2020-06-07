@@ -1,8 +1,9 @@
 /* DashboardComponent's private CSS styles */
 [class*='col-'] {
-  float: left;
+  display: inline-block;
   padding-right: 20px;
   padding-bottom: 20px;
+  padding-left: 20px;
 }
 [class*='col-']:last-of-type {
   padding-right: 0;
@@ -22,6 +23,11 @@ h3 {
 h4 {
   position: relative;
 }
+h5 {
+  text-align: center;
+  margin-top: 0;
+  color: rgb(177, 176, 176);
+}
 .grid {
   margin: 0;
 }
@@ -36,11 +42,12 @@ h4 {
   min-width: 120px;
   background-color: #3f525c;
   border-radius: 2px;
+  
 }
 .module:hover {
-  background-color: #eee;
+  background-color: rgb(117, 117, 117);
   cursor: pointer;
-  color: #607d8b;
+  color: #000000;
 }
 .grid-pad {
   padding: 10px 0;

@@ -1,10 +1,35 @@
-/* HeroDetailComponent's private CSS styles */
+@import "../../assets/variables";
+/* UserDetailComponent's private CSS styles */
 label {
   display: inline-block;
-  width: 3em;
-  margin: .5em 0;
+  width: 10em;
+  margin: .5em .5em;
   color: #607D8B;
   font-weight: bold;
+}
+div > span {
+  display: inline-block;
+  margin-left: .5em;
+  margin-bottom: .3em;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-size: inherit;
+  padding-right: 4px;
+}
+.user-details {
+  font-size: 1.2em;
+}
+h5 {
+  margin: -1.3em 0em .3em;
+  width: 72%;
+  background-color: $bg-color;
+}
+.current {
+  margin: .5em .5em 1em;
+  border-style: ridge;
+  border-color: gray;
+  border-radius: .5em;
+  width: fit-content;
+  padding: .5em;
 }
 input {
   height: 2em;

@@ -1,6 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { User } from '../user';
 
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 
@@ -24,10 +26,9 @@ export class UserDetailComponent implements OnInit {
 
   ngOnInit(): void 
   {
-    this.getHero();
+    this.getUser();
   }
-
-  getHero(): void 
+  getUser(): void 
   {
     var id = this.route.snapshot.paramMap.get('id').toString();
     this.userService.getUser(id).subscribe(user => this.user = user);

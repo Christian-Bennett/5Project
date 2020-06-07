@@ -1,8 +1,11 @@
-<h3>Top Heroes</h3>
-<div class="grid grid-pad">
-  <a *ngFor="let user of users" class="col-1-4" routerLink="/detail/{{user.id}}">
-    <div class="module hero">
-      <h4>{{user.firstName}} {{user.lastName}}</h4>
-    </div>
-  </a>
-</div>
+
+  <h3>Users</h3>
+  <h5>(Click on user to edit details)</h5>
+  <div class="grid grid-pad">
+    <a *ngFor="let user of users" class="col-1-4" routerLink="/detail/{{user.id}}">
+      <div class="module user">
+        <h4>{{user.firstName}} {{user.lastName}}</h4>
+      </div>
+    </a>
+  </div>
+

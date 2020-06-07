@@ -1,15 +1,17 @@
-<h2>User Information</h2>
-<div>
-  <label>Username:
-    <input #username />
-  </label>
-  <button (click)="add(username.value); username.value=''">
-    add
-  </button>
+<div class="wrapper user-component">
+  <h2>User Information</h2>
+  <div>
+    <label>Username:
+      <input #username />
+    </label>
+    <button (click)="add(username.value); username.value=''">
+      add
+    </button>
+  </div>
+  <ul class="users">
+    <li *ngFor="let user of users" routerLink="/detail/{{user.id}}">
+      <span class="badge">{{user.id}}: </span> {{user.firstName}} {{user.lastName}}
+      <button class="delete" title="delete user" (click)="delete(user)">X</button>
+    </li>
+  </ul>
 </div>
-<ul class="users">
-  <li *ngFor="let user of users" routerLink="/detail/{{user.id}}">
-    <span class="badge">{{user.id}}: </span> {{user.firstName}} {{user.lastName}}
-    <button class="delete" title="delete user" (click)="delete(user)">X</button>
-  </li>
-</ul>

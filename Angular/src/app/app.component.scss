@@ -1,0 +1,43 @@
+@import "../assets/variables";
+
+.title {
+  font-size: 35px;
+  border-right: thin;
+  border-color: black;
+  border-right-style: groove;
+}
+.banner{
+  display: inline-block;
+  margin: 10px;
+  padding: 0px 8px;
+}
+.header {
+  border-bottom-style: groove;
+  margin-bottom: 1em;
+}
+nav > a{
+  text-decoration: none;
+  font-size: 25px;
+  color: black;
+  margin-right: 20px;
+}
+nav > a:hover {
+  text-decoration-line: underline;
+}
+app-messages {
+  float: left;
+  margin: 10px;
+}
+.wrapper {
+  background-color: $bg-color;
+  width: 90%;
+  align-self: center;
+  position: absolute;
+  left: 5%;
+  box-shadow: 0px 3px 5px 5px;
+}
+
+
+
+
+

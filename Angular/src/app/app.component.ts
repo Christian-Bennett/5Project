@@ -12,9 +12,9 @@ export class AppComponent {
   constructor(private renderer: Renderer2)
   {
     this.renderer.setStyle(document.body, 'margin', '0%');
-    this.renderer.setStyle(document.body, 'background-position', 'absolute');
+    this.renderer.setStyle(document.body, 'background-position', 'center');
     this.renderer.setStyle(document.body, 'background-repeat', 'no-repeat');
-    this.renderer.setStyle(document.body, 'background-size', 'fit-content');
+    this.renderer.setStyle(document.body, 'background-size', 'cover');
     this.renderer.setStyle(document.body, 'background-image', 'url("../assets/images/Dashboard.jpg")');
 
   }

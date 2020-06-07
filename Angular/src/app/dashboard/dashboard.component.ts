@@ -17,9 +17,6 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.getUsers();
-    $(document).ready(function(){
-      $(".bg").css("background-image", "url(../../assets/images/Dashboard.jpg)");
-    });
   }
 
   getUsers(): void
