@@ -57,7 +57,7 @@ namespace API.Controllers
       [HttpPut]
       public IActionResult Put([FromBody] UserModel userModel)
       {
-        System.Console.WriteLine(userModel.FirstName);
+        System.Console.WriteLine(userModel.Password);
         _mongoDb.Put(userModel); //await _http.GetAsync(sb.ToString());
         return Ok();
       }

@@ -11,9 +11,10 @@ import { UserService } from '../user.service';
 import { MessageService } from '../message.service';
 import { tap, subscribeOn } from 'rxjs/operators';
 import { async } from 'rxjs/internal/scheduler/async';
-//import { bcrypt } from 'bcrypt';
+import * as bcrypt from 'bcryptjs';
+import * as $ from 'jquery';
 
-declare var require: any;
+//declare var hashPass: any;
 
 @Component({
   selector: 'app-user-detail',
@@ -44,8 +45,12 @@ export class UserDetailComponent implements OnInit {
     }
     else{
       await this.createUser().then(user => this.user = user).then(
-        user => this.buildForm(user))
+        user => this.buildForm(user));
+      
+      
     }
+
+
   }
   getUser(id: string): void 
   {
@@ -58,14 +63,24 @@ export class UserDetailComponent implements OnInit {
       // this.form.controls['id'].disable();
   }
 
-  onUpdate(): void {
-    //console.warn(this.form.value);
+  onUpdate(){
     this.user = this.form.value;
-    this.userService.updateUser(this.user).subscribe(() => this.goBack());
+    var a = this;
+    var user = this.user;
+    var pass = this.user.password
+    console.log(this.user);
+    bcrypt.hash(this.user.password, 10, function(err, hash) {
+      user = hash;
+      console.log(user)
+    })
+    this.userService.updateUser(user).subscribe(() => a.goBack());
+    
+    
   }
 
   onSubmit(): void {
     //console.warn(this.form.value);
+    
     this.user = this.form.value;
     this.userService.addUser(this.user).subscribe(() => this.goBack());
   }
@@ -110,13 +125,6 @@ export class UserDetailComponent implements OnInit {
       }
     }
   }
-  // Funct(): void 
-  // {
-  //   const bcrypt = require('../../../node_modules/bcrypt');
-  //   const saltRounds = 10;
-  //   const myPlaintextPassword = 's0/\/\P4$$w0rD';
-  //   const someOtherPlaintextPassword = 'not_bacon';
-  // }
 }
 
 

@@ -5,7 +5,8 @@ import { catchError, map, tap } from 'rxjs/operators';
 
 import { User } from './user';
 import { Observable, of } from 'rxjs';
-
+import * as bcrypt from 'bcryptjs';
+import { ok } from 'assert';
 
 @Injectable({
   providedIn: 'root'
@@ -47,19 +48,20 @@ export class UserService {
     )
   }
 
-  updateUser(user: User): Observable<any>
+  updateUser(user: User): Observable <any>
   {
+    console.log(user.password)
     return this.http.put(`${this.UsersUrl}Put`, user, this.httpOptions).pipe(
-      tap(_ => this.log(`updated User id=${user.id}`)),
-      catchError(this.handleError<any>('updateUser'))
-    );
+        tap(_ => this.log(`updated User id=${user.id}`)),
+        catchError(this.handleError<any>('updateUser'))
+      )
   }
 
   addUser(user: User): Observable<User> {
     return this.http.post<User>(`${this.UsersUrl}Post`, user, this.httpOptions).pipe(
       tap((newUser: User) => this.log(`added User w/ id=${newUser.id}`)),
       catchError(this.handleError<User>('addUser'))
-    );
+    )
   }
 
   deleteUser(user: User | string): Observable<User> 
@@ -84,8 +86,10 @@ export class UserService {
       return of(result as T);
     }
   }
+  encryptr(user: User)
+  {
 
-  
+  }  
 }
 
 
