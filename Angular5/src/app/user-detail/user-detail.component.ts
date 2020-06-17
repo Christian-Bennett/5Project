@@ -66,14 +66,8 @@ export class UserDetailComponent implements OnInit {
   onUpdate(){
     this.user = this.form.value;
     
-    const one = new Promise<string>((resolve, reject) => {
-      bcrypt.hash(this.user.password, 10, function(err, hash) {
-        resolve(hash);
-        reject(err);
-      })
-    })
-    one.then(value => {
-      console.log(value);
+    let hashProm = this.encryptr(this.user.password);
+    hashProm.then(value => {
       this.user.password = value;
       this.userService.updateUser(this.user).subscribe(() => this.goBack());    
     })
@@ -83,7 +77,11 @@ export class UserDetailComponent implements OnInit {
     //console.warn(this.form.value);
     
     this.user = this.form.value;
+    let hashProm = this.encryptr(this.user.password);
+    hashProm.then(value => {
+    this.user.password = value;
     this.userService.addUser(this.user).subscribe(() => this.goBack());
+    })
   }
 
   goBack(): void
@@ -125,6 +123,16 @@ export class UserDetailComponent implements OnInit {
         zip: 0
       }
     }
+  }
+
+  encryptr(pass: string)
+  {
+    return new Promise<string>((resolve, reject) => {
+      bcrypt.hash(pass, 11, function(err, hash) {
+        resolve(hash);
+        reject(err);
+      })
+    })
   }
 }
 
