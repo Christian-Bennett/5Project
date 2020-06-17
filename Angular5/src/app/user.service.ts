@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { MessageService } from './message.service';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { catchError, map, tap } from 'rxjs/operators';
+import { catchError, map, tap,} from 'rxjs/operators';
 
 import { User } from './user';
 import { Observable, of } from 'rxjs';
 import * as bcrypt from 'bcryptjs';
-import { ok } from 'assert';
+import * as $ from 'jquery';
 
 @Injectable({
   providedIn: 'root'
@@ -48,13 +48,12 @@ export class UserService {
     )
   }
 
-  updateUser(user: User): Observable <any>
+  updateUser(user: User): Observable<any>
   {
-    console.log(user.password)
-    return this.http.put(`${this.UsersUrl}Put`, user, this.httpOptions).pipe(
-        tap(_ => this.log(`updated User id=${user.id}`)),
-        catchError(this.handleError<any>('updateUser'))
-      )
+      return this.http.put(`${this.UsersUrl}Put`, user, this.httpOptions).pipe(
+      tap(_ => this.log(`updated User id=${user.id}`)),
+      catchError(this.handleError('updateUser'))
+    )    
   }
 
   addUser(user: User): Observable<User> {
@@ -88,7 +87,6 @@ export class UserService {
   }
   encryptr(user: User)
   {
-
   }  
 }
 

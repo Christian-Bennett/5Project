@@ -65,17 +65,18 @@ export class UserDetailComponent implements OnInit {
 
   onUpdate(){
     this.user = this.form.value;
-    var a = this;
-    var user = this.user;
-    var pass = this.user.password
-    console.log(this.user);
-    bcrypt.hash(this.user.password, 10, function(err, hash) {
-      user = hash;
-      console.log(user)
+    
+    const one = new Promise<string>((resolve, reject) => {
+      bcrypt.hash(this.user.password, 10, function(err, hash) {
+        resolve(hash);
+        reject(err);
+      })
     })
-    this.userService.updateUser(user).subscribe(() => a.goBack());
-    
-    
+    one.then(value => {
+      console.log(value);
+      this.user.password = value;
+      this.userService.updateUser(this.user).subscribe(() => this.goBack());    
+    })
   }
 
   onSubmit(): void {
