@@ -9,6 +9,8 @@ using System.Net.Http;
 using System.Text;
 using Domain.Models;
 using Storage.Database;
+using API.Events;
+using static API.Events.DbEvents;
 
 namespace API.Controllers
 {
@@ -21,14 +23,21 @@ namespace API.Controllers
       private readonly HttpClient _http;
       private readonly ILogger<UsersController> _logger;
       private readonly MongoDb _mongoDb;
-
+      private DbEvents _dbEvent;
+      private DbLogController _dbl;
       public string result = "";
 
       public UsersController(ILogger<UsersController> logger, HttpClient http, MongoDb mongoDb)
       {
+          _dbEvent = new DbEvents();
           _logger = logger;
           _http = http;
           _mongoDb = mongoDb;
+          _dbl = new DbLogController(mongoDb);
+          _dbEvent.DbEvent += (object sender, DbEventArgs args) =>
+          {
+            _dbl.onPost(sender, args);
+          };
       }
 
       [HttpGet]
@@ -36,12 +45,14 @@ namespace API.Controllers
       {
         var result = _mongoDb.Get<UserModel>();
         return Ok(result);
+
       }
 
       [HttpGet]
       public IActionResult GetOne()
       {
         var result = _mongoDb.Get<UserModel>(Request.QueryString.ToString().Substring(4));
+        _dbEvent.OnDbEvent($"Get {result.id.ToString()}");
         return Ok(result);
       }
 
@@ -49,23 +60,25 @@ namespace API.Controllers
       [HttpPost]
       public IActionResult Post([FromBody] UserModel userModel)
       {
-        System.Console.WriteLine("Called");
-        _mongoDb.Post(userModel); //await _http.GetAsync(sb.ToString());
+        _mongoDb.Post(userModel);
+        _dbEvent.OnDbEvent($"Post {userModel.id.ToString()}");
         return Ok();
       }
 
       [HttpPut]
       public IActionResult Put([FromBody] UserModel userModel)
       {
-        System.Console.WriteLine(userModel.Password);
-        _mongoDb.Put(userModel); //await _http.GetAsync(sb.ToString());
+        _mongoDb.Put(userModel); 
+        _dbEvent.OnDbEvent($"Put {userModel.id.ToString()}");
         return Ok();
       }
 
       [HttpDelete]
       public IActionResult Delete()
       {
-        _mongoDb.Delete<UserModel>(Request.QueryString.ToString().Substring(4));
+        var uId = Request.QueryString.ToString().Substring(4);
+        _mongoDb.Delete<UserModel>(uId);
+        _dbEvent.OnDbEvent($"Delete {uId}");
         return Ok();
       }
 

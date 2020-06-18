@@ -74,13 +74,12 @@ export class UserDetailComponent implements OnInit {
   }
 
   onSubmit(): void {
-    //console.warn(this.form.value);
-    
+ 
     this.user = this.form.value;
     let hashProm = this.encryptr(this.user.password);
     hashProm.then(value => {
-    this.user.password = value;
-    this.userService.addUser(this.user).subscribe(() => this.goBack());
+      this.user.password = value;
+      this.userService.addUser(this.user).subscribe(() => this.goBack());
     })
   }
 
