@@ -4,24 +4,22 @@ using System.Collections;
 
 namespace API.Events
 {
+  public class DbEventArgs : EventArgs
+  {
+    public IEnumerable EventDetails { get; set; }
+  }
+
+  public delegate void DbEventHandler(object source, DbEventArgs args);
   
-  public class DbEvents{
-    
-
-    public delegate void DbEventHandler(object source, DbEventArgs args);
-    public class DbEventArgs : EventArgs
-    {
-      public IEnumerable EventDetails { get; set; }
-    }
-
+  public class DbEvents
+  {
     public event DbEventHandler DbEvent;
 
     public virtual void OnDbEvent(string pass)
     {
-      var args = new DbEventArgs(){EventDetails = pass};
       if(DbEvent != null)
       {
-        DbEvent(this, args);
+        DbEvent(this, new DbEventArgs(){EventDetails = pass});
 
       }
     }

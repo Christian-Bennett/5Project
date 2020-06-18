@@ -10,7 +10,6 @@ using System.Text;
 using Domain.Models;
 using Storage.Database;
 using API.Events;
-using static API.Events.DbEvents;
 
 namespace API.Controllers
 {
