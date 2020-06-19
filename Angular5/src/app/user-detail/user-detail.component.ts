@@ -5,12 +5,11 @@ import { v4 as uuid } from 'uuid';
 import { FormsModule, ReactiveFormsModule, FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import { ActivatedRoute } from '@angular/router';
-import { Location, JsonPipe } from '@angular/common';
+import { Location } from '@angular/common';
 
 import { UserService } from '../user.service';
 import { MessageService } from '../message.service';
 import { tap, subscribeOn } from 'rxjs/operators';
-import { async } from 'rxjs/internal/scheduler/async';
 import * as bcrypt from 'bcryptjs';
 import * as $ from 'jquery';
 
@@ -46,10 +45,7 @@ export class UserDetailComponent implements OnInit {
     else{
       await this.createUser().then(user => this.user = user).then(
         user => this.buildForm(user));
-      
-      
     }
-
 
   }
   getUser(id: string): void 

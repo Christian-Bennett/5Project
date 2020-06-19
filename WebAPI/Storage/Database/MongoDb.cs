@@ -26,6 +26,14 @@ namespace Storage.Database
       return users[0];
     }
 
+    public T Login<T>(string username)
+    {
+      string collName = typeof(T).ToString();
+      var collection = db.GetCollection<T>(collName);
+      var users = collection.Find(Builders<T>.Filter.Eq("Username", username)).ToList();
+      return users[0];
+    }
+
     public void Post<T>(T model) 
     {
       model.GetType().GetProperty("id").SetValue(model, Guid.NewGuid());

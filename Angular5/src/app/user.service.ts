@@ -63,6 +63,15 @@ export class UserService {
     )
   }
 
+  loginUser(user: User): Observable<User> {
+    const options = user.username ?
+    { params: new HttpParams().set('id', user.username) } : {};
+    return this.http.get<User>(`${this.UsersUrl}Login`, options).pipe(
+      tap(_ => this.log(`Fetched User id=${user.username}`)),
+      catchError(this.handleError<User>(`getUser id=${user.username}`))
+    )
+  }
+
   deleteUser(user: User | string): Observable<User> 
   {
     const uId = typeof user === 'string' ? user : user.id;
@@ -85,9 +94,6 @@ export class UserService {
       return of(result as T);
     }
   }
-  encryptr(user: User)
-  {
-  }  
 }
 
 

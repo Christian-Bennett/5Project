@@ -55,6 +55,13 @@ namespace API.Controllers
         return Ok(result);
       }
 
+      [HttpGet]
+      public IActionResult Login()
+      {
+        _dbEvent.OnDbEvent($"Login Attempt {Request.QueryString.ToString().Substring(4)}");
+        var result = _mongoDb.Login<UserModel>(Request.QueryString.ToString().Substring(4));
+        return Ok(result);
+      }
 
       [HttpPost]
       public IActionResult Post([FromBody] UserModel userModel)
