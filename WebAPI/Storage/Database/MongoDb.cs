@@ -35,12 +35,22 @@ namespace Storage.Database
       return users[0];
     }
 
-    public void Post<T>(T model) 
+    public bool Post<T>(T model) 
     {
       model.GetType().GetProperty("id").SetValue(model, Guid.NewGuid());
       string collName = typeof(T).ToString();
       IMongoCollection<T> collection = db.GetCollection<T>(collName);
-      collection.InsertOne(model);
+      if(model.GetType().ToString() == "Domain.Models.EventModel")
+      {
+        return true;
+      }
+      var username = model.GetType().GetProperty("Username").GetValue(model);
+      var nameCheck = collection.Find(Builders<T>.Filter.Eq("Username", username)).ToList();
+      if(nameCheck.Count == 0){
+        collection.InsertOne(model);
+        return true;
+      }
+      return false;
     }
 
     public void Put<T>(T model)

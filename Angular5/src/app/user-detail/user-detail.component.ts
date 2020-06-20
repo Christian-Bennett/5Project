@@ -37,23 +37,23 @@ export class UserDetailComponent implements OnInit {
   async ngOnInit()
   {
     let id = this.route.snapshot.paramMap.get('id').toString();
-    
+    this.flag = true;
 
     if(id.length == 36){
       this.getUser(id);
 
     }
     else{
+      this.flag = false;
       await this.createUser().then(user => this.user = user).then(
-        user => this.buildForm(user));
+        user => this.buildForm(user, this.flag));
     }
 
   }
   getUser(id: string): void 
   {
-    this.flag = true;
     this.userService.getUser(id).pipe(tap(
-      user => this.buildForm(user)))
+      user => this.buildForm(user, this.flag)))
       .subscribe(user => this.user = user);
       
   }
@@ -70,7 +70,7 @@ export class UserDetailComponent implements OnInit {
 
   onSubmit(): void {
  
-    this.user = this.form.value;
+    this.user = this.form.getRawValue();
     let hashProm = this.encryptr(this.user.password);
     hashProm.then(value => {
       this.user.password = value;
@@ -83,7 +83,7 @@ export class UserDetailComponent implements OnInit {
     this.location.back();
   }
 
-  buildForm(user: User): void
+  buildForm(user: User, flag: boolean): void
   {
     this.form = this.formBuilder.group({
       id:  [user.id],
@@ -99,9 +99,13 @@ export class UserDetailComponent implements OnInit {
         zip:  [user.address.zip, Validators.required]
       })
     })
-    this.form.controls['username'].disable();
-    this.form.controls['password'].disable();
     this.form.controls['id'].disable();
+    if(flag == true){
+      this.form.controls['username'].disable();
+      this.form.controls['password'].disable();
+      
+    }
+
   }
 
   async createUser()

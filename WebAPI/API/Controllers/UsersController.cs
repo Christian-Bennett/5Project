@@ -66,8 +66,15 @@ namespace API.Controllers
       [HttpPost]
       public IActionResult Post([FromBody] UserModel userModel)
       {
+        // if(_mongoDb.Post(userModel))
+        // {
+        //   _dbEvent.OnDbEvent($"Post {userModel.id.ToString()}");
+        // }
+        // else{
+        //   _dbEvent.OnDbEvent("Username Taken");
+        // }
         _mongoDb.Post(userModel);
-        _dbEvent.OnDbEvent($"Post {userModel.id.ToString()}");
+
         return Ok();
       }
 
