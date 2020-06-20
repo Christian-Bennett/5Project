@@ -2,9 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule, ReactiveFormsModule, FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MessageService } from '../message.service';
 import { UserService } from '../user.service'
-import { ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
+import { Location } from '@angular/common';
 import * as bcrypt from 'bcryptjs';
 import { User } from '../user'
+import * as $ from 'jquery';
+import { DashboardComponent } from '../dashboard/dashboard.component';
+
 
 @Component({
   selector: 'app-login',
@@ -20,9 +24,9 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private messageService: MessageService,
-    private route: ActivatedRoute,
+    private router: Router,
     private userService: UserService,
-    private formBuilder: FormBuilder 
+    private formBuilder: FormBuilder,
   ) { }
 
   ngOnInit(): void {
@@ -34,46 +38,56 @@ export class LoginComponent implements OnInit {
 
   onLogin()
   {
-    this.user = this.createUser();
-    this.un = this.loginForm.value["username"];
-    //this.pass = ;
-    let hashPass = this.encryptr(this.loginForm.value["password"]);
-    
-    hashPass.then(value => {
-      
+    this.user = this.createUser(this.loginForm.value["username"]);
+    //this.userService.loginUser(this.user).subscribe(user => this.user = user)
+    this.userService.loginUser(this.user).subscribe(user => {
+      let hashCheck = this.decryptr(this.loginForm.value["password"], user.password);
+      hashCheck.then(value => {
+        if(value){
+          this.router.navigate([`/detail/${user.id}`])
+        }
+        else{
+          this.messageService.add("Incorrect Pass");
+        }
+      });
 
-      this.user.password = value;
-      this.user.username = this.un
-      this.messageService.add(this.user.password);
-      this.userService.loginUser(this.user).subscribe(user => this.user = user);
-    }).then(() => {
-      //this.user.password = value;
-      //this.user.username = this.un;
-      if(this.user.id == '-1')
-      {
-        this.messageService.add("Login Failed");
-      }
-      else{
-        this.messageService.add("Login Yay!");
-      }
-    })
+
+    });
+      
+    //   if(this.user.id != '-1')
+    //   {
+    //     const hashPass = this.decryptr(this.loginForm.value["password"], this.user.password);
+    //     hashPass.then(value => {
+    //       console.log(value);
+    //     });
+    //   }
+
+    
+    
+    // hashPass.then(value => {
+    //   this.user.password = value;
+    //   this.user.username = this.un
+    //   this.messageService.add(this.user.password);
+    // });
+
+
   }
 
-  encryptr(pass: string)
+  decryptr(pass: string, hash: string)
   {
     return new Promise<string>((resolve, reject) => {
-      bcrypt.hash(pass, 11, function(err, hash) {
-        resolve(hash);
+      bcrypt.compare(pass, hash, function(err, result) {
+        resolve(result);
         reject(err);
       })
     })
   }
 
-  createUser(): User
+  createUser(un: string): User
   {
     return {
       id: '-1',
-      username: '',
+      username: un,
       password: '',
       firstName: '',
       lastName: '',

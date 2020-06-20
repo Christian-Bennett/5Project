@@ -67,8 +67,8 @@ export class UserService {
     const options = user.username ?
     { params: new HttpParams().set('id', user.username) } : {};
     return this.http.get<User>(`${this.UsersUrl}Login`, options).pipe(
-      tap(_ => this.log(`Fetched User id=${user.username}`)),
-      catchError(this.handleError<User>(`getUser id=${user.username}`))
+      tap(_ => this.log(`Login Attempt un=${user.username}`)),
+      catchError(this.handleError<User>(`Login Attempt un=${user.username}`))
     )
   }
 

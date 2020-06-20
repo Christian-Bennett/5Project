@@ -31,6 +31,7 @@ namespace Storage.Database
       string collName = typeof(T).ToString();
       var collection = db.GetCollection<T>(collName);
       var users = collection.Find(Builders<T>.Filter.Eq("Username", username)).ToList();
+      //System.Console.WriteLine(users[0].GetType().GetProperty("Password").GetValue(users[0]));      
       return users[0];
     }
 
