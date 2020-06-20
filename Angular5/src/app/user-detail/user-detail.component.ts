@@ -41,6 +41,7 @@ export class UserDetailComponent implements OnInit {
 
     if(id.length == 36){
       this.getUser(id);
+
     }
     else{
       await this.createUser().then(user => this.user = user).then(
@@ -54,13 +55,11 @@ export class UserDetailComponent implements OnInit {
     this.userService.getUser(id).pipe(tap(
       user => this.buildForm(user)))
       .subscribe(user => this.user = user);
-      // this.form.controls['username'].disable();
-      // this.form.controls['password'].disable();
-      // this.form.controls['id'].disable();
+      
   }
 
   onUpdate(){
-    this.user = this.form.value;
+    this.user = this.form.getRawValue();
     
     let hashProm = this.encryptr(this.user.password);
     hashProm.then(value => {
@@ -100,6 +99,9 @@ export class UserDetailComponent implements OnInit {
         zip:  [user.address.zip, Validators.required]
       })
     })
+    this.form.controls['username'].disable();
+    this.form.controls['password'].disable();
+    this.form.controls['id'].disable();
   }
 
   async createUser()
