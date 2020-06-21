@@ -9,18 +9,18 @@ using MVC.Models;
 
 namespace MVC.Controllers
 {
-    public class HomeController : Controller
+    public class ErrorController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ILogger<ErrorController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        public ErrorController(ILogger<ErrorController> logger)
         {
             _logger = logger;
         }
 
         public IActionResult Index()
         {
-            return View();
+            return View("Error", new ErrorViewModel(){ RequestId = "Standard Error" });
         }
 
         public IActionResult Privacy()
